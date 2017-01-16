@@ -1,0 +1,26 @@
+{
+  "name": "node-shell",
+  "version": "1.0.0",
+  "description": "bash like shell implemented in node",
+  "main": "bash.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avarona/bash.git"
+  },
+  "keywords": [
+    "bash",
+    "shell"
+  ],
+  "author": "Alejandro & Jessica",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/avarona/bash/issues"
+  },
+  "homepage": "https://github.com/avarona/bash#readme",
+  "dependencies": {
+    "request": "^2.79.0"
+  }
+}
