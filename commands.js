@@ -8,67 +8,68 @@ let argsSplit = function(cmd) {
 }
 
 module.exports = {
-  pwd: function() {
+  pwd: function(cmd, done) {
     let pwd = process.cwd();
-    process.stdout.write(pwd);
-    process.stdout.write('\nprompt > ');
+    done(pwd);
   },
-  date: function() {
+  date: function(cmd, done) {
     let date = new Date().toString().trim();
-    process.stdout.write(date);
-    process.stdout.write('\nprompt > ');
+    done(date);
   },
-  ls: function() {
+  ls: function(cmd, done) {
     fs.readdir('.', function(err, files) {
       if (err) throw err;
+      let finalString = [];
       files.forEach(function(file) {
-        process.stdout.write(file.toString() + '\n');
+        finalString.push(file.toString());
       });
-      process.stdout.write('prompt > ');
+      done(finalString.join('\n'));
     });
   },
-  echo: function(cmd) {
+  echo: function(cmd, done) {
     let args = argsSplit(cmd);
     if (args[0] === '$PATH') {
-      process.stdout.write(process.execPath);
+      done(process.execPath);
     } else {
+      let finalString = [];
       args.forEach(function(str) {
-        process.stdout.write(str + ' ');
+        finalString.push(str);
       });
+      done(finalString.join(' '));
     }
-    process.stdout.write('\nprompt > ');
   },
-  cat: function(cmd) {
+  cat: function(cmd, done) {
     let args = argsSplit(cmd);
     args.forEach(function(el) {
       fs.readFile(el, function(err, contents) {
         if (err) throw err;
-        process.stdout.write(contents);
+        done(contents);
       });
     })
-      process.stdout.write('\nprompt > ');
   },
-  head: function(cmd) {
+  head: function(cmd, done) {
     let args = argsSplit(cmd);
     fs.readFile(args[0], function(err, contents) {
       if (err) throw err;
-      var arr = contents.toString().split('\n');
+      let arr = contents.toString().split('\n');
+      let finalString = [];
       for (let i = 0; i < 5; i++) {
-        process.stdout.write(arr[i] + '\n');
+        finalString.push(arr[i]);
       }
-      process.stdout.write('prompt > ');
+      done(finalString.join('\n'));
     })
   },
-  tail: function(cmd) {
+  tail: function(cmd, done) {
     let args = argsSplit(cmd);
     fs.readFile(args[0], function(err, contents) {
       if (err) throw err;
       let arr = contents.toString().split('\n');
       let length = arr.length;
+      let finalString = [];
       for (let i = length - 5 ; i < length; i++) {
-        process.stdout.write(arr[i] + '\n');
+        finalString.push(arr[i]);
       }
-      process.stdout.write('prompt > ');
+      done(finalString.join('\n'));
     })
   },
   // TODO: Complete sort, wc & uniq functions
@@ -81,12 +82,12 @@ module.exports = {
 //   uniq: function(cmd) {
 //
 //   }
-  curl: function(cmd) {
+  curl: function(cmd, done) {
     let args = argsSplit(cmd);
     // need to handle for when http:// is not included
     request(args[0], function (error, response, body) {
       if (!error && response.statusCode === 200) {
-        console.log(body) // Show the HTML for the Google homepage.
+        done(body); // Show the HTML for the Google homepage.
       }
     })
   }
